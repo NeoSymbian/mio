@@ -54,6 +54,7 @@ cfg_os_poll! {
         target_os = "hurd",
         target_os = "nto",
         target_os = "vita",
+        target_os = "symbian",
         target_os = "cygwin",
         target_os = "wasi",
         target_os = "horizon"
@@ -115,6 +116,7 @@ cfg_os_poll! {
         target_os = "redox",
         all(mio_unsupported_force_poll_poll, target_os = "solaris"),
         target_os = "vita",
+        target_os = "symbian",
         target_os = "cygwin",
         all(target_os = "wasi", target_env = "p1")
     ), path = "waker/pipe.rs")]
@@ -169,6 +171,7 @@ cfg_os_poll! {
             target_os = "redox",
             all(mio_unsupported_force_poll_poll, target_os = "solaris"),
             target_os = "vita",
+            target_os = "symbian",
             target_os = "cygwin",
         ),
         not(target_os = "hermit"),

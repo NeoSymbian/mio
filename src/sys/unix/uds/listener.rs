@@ -75,6 +75,7 @@ pub(crate) fn accept(listener: &net::UnixListener) -> io::Result<(UnixStream, So
         target_os = "watchos",
         target_os = "espidf",
         target_os = "vita",
+        target_os = "symbian",
         target_os = "nto",
         target_os = "horizon",
         // Android x86's seccomp profile forbids calls to `accept4(2)`
@@ -106,6 +107,7 @@ pub(crate) fn accept(listener: &net::UnixListener) -> io::Result<(UnixStream, So
         target_os = "watchos",
         target_os = "espidf",
         target_os = "vita",
+        target_os = "symbian",
         target_os = "nto",
         target_os = "horizon",
         all(target_arch = "x86", target_os = "android")
@@ -119,7 +121,7 @@ pub(crate) fn accept(listener: &net::UnixListener) -> io::Result<(UnixStream, So
         // Ensure the socket is closed if either of the `fcntl` calls
         // error below.
         let s = unsafe { net::UnixStream::from_raw_fd(socket) };
-        #[cfg(not(any(target_os = "emscripten", target_os = "espidf", target_os = "vita")))]
+        #[cfg(not(any(target_os = "emscripten", target_os = "espidf", target_os = "vita", target_os = "symbian")))]
         syscall!(fcntl(socket, libc::F_SETFD, libc::FD_CLOEXEC))?;
 
         // See https://github.com/tokio-rs/mio/issues/1450
@@ -128,6 +130,7 @@ pub(crate) fn accept(listener: &net::UnixListener) -> io::Result<(UnixStream, So
             target_os = "emscripten",
             target_os = "espidf",
             target_os = "vita",
+            target_os = "symbian",
             target_os = "nto",
         ))]
         syscall!(fcntl(socket, libc::F_SETFL, libc::O_NONBLOCK))?;

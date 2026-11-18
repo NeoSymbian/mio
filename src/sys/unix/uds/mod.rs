@@ -101,6 +101,7 @@ where
         target_os = "watchos",
         target_os = "espidf",
         target_os = "vita",
+        target_os = "symbian",
         target_os = "horizon",
     )))]
     let flags = flags | libc::SOCK_NONBLOCK | libc::SOCK_CLOEXEC;
@@ -126,6 +127,7 @@ where
         target_os = "watchos",
         target_os = "espidf",
         target_os = "vita",
+        target_os = "symbian",
         target_os = "horizon"
     ))]
     {

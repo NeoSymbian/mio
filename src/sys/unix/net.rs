@@ -67,6 +67,7 @@ pub(crate) fn new_socket(domain: libc::c_int, socket_type: libc::c_int) -> io::R
         target_os = "espidf",
         target_os = "haiku",
         target_os = "vita",
+        target_os = "symbian",
         target_os = "nto",
     ))]
     {
@@ -114,8 +115,10 @@ pub(crate) fn socket_addr(addr: &SocketAddr) -> (SocketAddrCRepr, libc::socklen_
                 sin_family: libc::AF_INET as libc::sa_family_t,
                 sin_port: addr.port().to_be(),
                 sin_addr,
-                #[cfg(not(any(target_os = "haiku", target_os = "vita", target_os = "wasi")))]
+                #[cfg(not(any(target_os = "haiku", target_os = "vita", target_os = "symbian", target_os = "wasi")))]
                 sin_zero: [0; 8],
+                #[cfg(target_os = "symbian")]
+                sin_zero: [0; 20],
                 #[cfg(target_os = "haiku")]
                 sin_zero: [0; 24],
                 #[cfg(target_os = "vita")]
@@ -171,6 +174,7 @@ pub(crate) fn socket_addr(addr: &SocketAddr) -> (SocketAddrCRepr, libc::socklen_
                     target_os = "watchos",
                     target_os = "espidf",
                     target_os = "vita",
+                    target_os = "symbian",
                     target_os = "nto",
                     target_os = "hermit",
                 ))]
