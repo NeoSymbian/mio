@@ -23,7 +23,6 @@ pub(crate) fn new_raw() -> io::Result<[RawFd; 2]> {
         target_os = "redox",
         target_os = "solaris",
         target_os = "vita",
-        target_os = "symbian",
         target_os = "cygwin",
         target_os = "nuttx",
     ))]
@@ -57,6 +56,22 @@ pub(crate) fn new_raw() -> io::Result<[RawFd; 2]> {
             {
                 let err = io::Error::last_os_error();
                 // Don't leak file descriptors. Can't handle closing error though.
+                let _ = libc::close(fds[0]);
+                let _ = libc::close(fds[1]);
+                return Err(err);
+            }
+        }
+    }
+
+    // Symbian (P.I.P.S.): pipe() over the kernel's pipe LDD, no pipe2; no exec, so no close-on-exec
+    #[cfg(target_os = "symbian")]
+    unsafe {
+        if libc::pipe(fds.as_mut_ptr()) != 0 {
+            return Err(io::Error::last_os_error());
+        }
+        for fd in &fds {
+            if libc::fcntl(*fd, libc::F_SETFL, libc::O_NONBLOCK) != 0 {
+                let err = io::Error::last_os_error();
                 let _ = libc::close(fds[0]);
                 let _ = libc::close(fds[1]);
                 return Err(err);
